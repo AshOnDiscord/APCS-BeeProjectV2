@@ -27,14 +27,10 @@ public class Grid3D {
         }
     }
 
-    public Double getHeuristics(String point, Point[] end) {
-        int y = Integer.parseInt(point.substring(1, point.indexOf(",")).strip());
-        int x = Integer.parseInt(point.substring(point.indexOf(",") + 1, point.lastIndexOf(",")).strip());
-        int z = Integer.parseInt(point.substring(point.lastIndexOf(",") + 1, point.length() - 1).strip());
-
+    public Double getHeuristics(Point point, Point[] end) {
         int min = Integer.MAX_VALUE;
         for (Point endPoint : end) {
-            int distance = Math.abs(x - endPoint.x) + Math.abs(y - endPoint.y) + Math.abs(z - endPoint.z);
+            int distance = Math.abs(point.x - endPoint.x) + Math.abs(point.y - endPoint.y) + Math.abs(point.z - endPoint.z);
             if (distance < min) {
                 min = distance;
             }
@@ -42,11 +38,8 @@ public class Grid3D {
         return min * 0.25;
     }
 
-    public Neighbor[] getNeighborsWrapper(String point, Point[] end) {
-        int y = Integer.parseInt(point.substring(1, point.indexOf(",")).strip());
-        int x = Integer.parseInt(point.substring(point.indexOf(",") + 1, point.lastIndexOf(",")).strip());
-        int z = Integer.parseInt(point.substring(point.lastIndexOf(",") + 1, point.length() - 1).strip());
-        return getNeighbors(new Point(y, x, z), end);
+    public Neighbor[] getNeighborsWrapper(Point point, Point[] end) {
+        return getNeighbors(point, end);
     }
 
     public Neighbor[] getNeighbors(Point point, Point[] end) {
@@ -183,7 +176,7 @@ public class Grid3D {
             }
             // console.log(sides, isX, isY);
             Point finalCell = cell;
-            if (Arrays.stream(end).anyMatch(e -> e.toString().equals(finalCell.toString()))) {
+            if (Arrays.asList(end).contains(finalCell)) {
                 // if atleast one side is open, the cell is important
                 for (Point side : sides) {
                     if (side != null && !side.state) {

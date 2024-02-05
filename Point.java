@@ -1,4 +1,4 @@
-public class Point {
+public class Point implements Comparable<Point> {
     public int x;
     public int y;
     public int z;
@@ -16,6 +16,18 @@ public class Point {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+        Point point = (Point) obj;
+        return point.y == this.y && point.x == this.x && point.z == this.z;
+    }
+
+    @Override
     public String toString() {
         return "(" + this.y + ", " + this.x + ", " + this.z + ")";
     }
@@ -30,5 +42,25 @@ public class Point {
         }
 
         return new Point(values[0], values[1], values[2]);
+    }
+
+    @Override
+    public int compareTo(Point o) {
+        // compare y, x, z
+        if (this.y != o.y) {
+            return this.y - o.y;
+        }
+        if (this.x != o.x) {
+            return this.x - o.x;
+        }
+        return this.z - o.z;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = this.y;
+        result = 31 * result + this.x;
+        result = 31 * result + this.z;
+        return result;
     }
 }
