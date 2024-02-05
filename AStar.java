@@ -1,11 +1,8 @@
-import java.util.HashMap;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.function.BiFunction;
 
 public class AStar {
-    public static void calc(Point[] points, Point start, Point[] end, BiFunction<Point, Point[], Neighbor[]> getNeighbors, BiFunction<Point, Point[], Double> getHeuristics) {
+    public static int calc(Point[] points, Point start, Point[] end, BiFunction<Point, Point[], LinkedList<Point>> getNeighbors, BiFunction<Point, Point[], Double> getHeuristics) {
         // str is the point, int is the heuristic
         Map<Point, Double> unseen = new HashMap<>();
         // int is the distance, string is the point, second string is the previous point
@@ -49,38 +46,39 @@ public class AStar {
                 }
             }
 
-            Neighbor[] neighbors = getNeighbors.apply(current, end);
-            for (Neighbor neighbor : neighbors) {
+            LinkedList<Point> neighbors = getNeighbors.apply(current, end);
+            for (Point neighbor : neighbors) {
                 // see if the neighbor already has a distance in minDistances
                 Integer prevSize = null;
                 for (int dist : minDistances.keySet()) {
                     SortedMap<Point, Point> subMap = minDistances.get(dist);
-                    if (subMap.containsKey(neighbor.point)) {
+                    if (subMap.containsKey(neighbor)) {
                         prevSize = dist;
                         break;
                     }
                 }
-                int newDist = currentDistance + neighbor.distance;
+                int newDist = currentDistance + 1;
                 if (prevSize != null) {
                     // prev exists
                     if (newDist < prevSize) {
-                        minDistances.get(prevSize).remove(neighbor.point);
+                        minDistances.get(prevSize).remove(neighbor);
                         if (minDistances.containsKey(newDist)) {
-                            minDistances.get(newDist).put(neighbor.point, current);
+                            minDistances.get(newDist).put(neighbor, current);
                         } else {
-                            minDistances.put(newDist, new TreeMap<>(Map.of(neighbor.point, current)));
+                            minDistances.put(newDist, new TreeMap<>(Map.of(neighbor, current)));
                         }
                     }
                 } else {
                     if (minDistances.containsKey(newDist)) {
-                        minDistances.get(newDist).put(neighbor.point, current);
+                        minDistances.get(newDist).put(neighbor, current);
                     } else {
-                        minDistances.put(newDist, new TreeMap<>(Map.of(neighbor.point, current)));
+                        minDistances.put(newDist, new TreeMap<>(Map.of(neighbor, current)));
                     }
                 }
             }
         }
         assert current != null;
         System.out.println("Done: " + current + " | " + currentDistance);
+        return currentDistance;
     }
 }

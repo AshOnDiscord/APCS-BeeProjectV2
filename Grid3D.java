@@ -38,11 +38,7 @@ public class Grid3D {
         return min * 0.25;
     }
 
-    public Neighbor[] getNeighborsWrapper(Point point, Point[] end) {
-        return getNeighbors(point, end);
-    }
-
-    public Neighbor[] getNeighbors(Point point, Point[] end) {
+    public LinkedList<Point> getNeighbors(Point point, Point[] end) {
         LinkedList<Point> neighbors = new LinkedList<>();
         neighbors.addAll(this.rookPath(point, 0, 1, 0, end)); // down | +x
         neighbors.addAll(this.rookPath(point, 0, -1, 0, end)); // up | -x
@@ -62,7 +58,7 @@ public class Grid3D {
         neighbors.addAll(this.bishopPath(point, -1, 0, -1)); // upX | -x -z
         neighbors.addAll(this.bishopPath(point, 1, 0, 1)); // downXZ | +x +z
         neighbors.addAll(this.bishopPath(point, 1, 0, -1)); // upXZ | +x -z
-        return neighbors.stream().map(neighbor -> new Neighbor(neighbor, 1)).toArray(Neighbor[]::new);
+        return neighbors;
     }
 
     public List<Point> rookPath(Point origin, int xDir, int yDir, int zDir, Point[] end) {

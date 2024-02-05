@@ -21,9 +21,13 @@ public class Main {
                 .flatMap(Arrays::stream)
                 .toList()).toArray(new Point[0]);
 
+        int sum = 0;
+
         for (Point bee : data.bees) {
-            AStar.calc(flattenedGrid, bee, data.end, grid::getNeighborsWrapper, grid::getHeuristics);
+            sum += AStar.calc(flattenedGrid, bee, data.end, grid::getNeighbors, grid::getHeuristics);
         }
+
+        System.out.println("Sum: " + sum);
     }
 }
 
