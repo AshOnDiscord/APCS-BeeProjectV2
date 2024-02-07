@@ -1,3 +1,5 @@
+package bees;
+
 import java.util.*;
 import java.util.function.BiFunction;
 

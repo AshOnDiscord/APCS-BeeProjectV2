@@ -1,3 +1,5 @@
+package bees;
+
 public class Neighbor {
     public Point point;
     public int distance;
