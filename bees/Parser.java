@@ -19,7 +19,7 @@ public class Parser {
 
     public static Data parse(String fileName) {
         File file = new File(fileName);
-        BufferedReader br = null;
+        BufferedReader br;
         try {
             br = new BufferedReader(new java.io.FileReader(file));
             String line;
